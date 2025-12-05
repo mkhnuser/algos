@@ -7,6 +7,9 @@ class Node:
         self.next = next
 
 
+# WARNING: One-based counting is assumed, not zero-based.
+
+
 class LinkedList:
     @staticmethod
     def print_list(vertex: Node):
@@ -51,10 +54,36 @@ class LinkedList:
 
         raise ValueError(f"Out of bound index {index} has been provided.")
 
+    @staticmethod
+    def delete_node(head: Node, index: int) -> Node | None:
+        if index < 1:
+            raise ValueError("Invalid Index has been provided!")
+
+        if index == 1:
+            new_head = head.next
+            return new_head
+
+        node = head
+        index -= 2
+
+        while index and node is not None:
+            node = node.next
+            index -= 1
+
+        if node is None:
+            raise ValueError("Invalid Index has been provided!")
+
+        node_to_be_deleted = node.next
+
+        if node_to_be_deleted is None:
+            raise ValueError("Invalid Index has been provided!")
+
+        node.next = node_to_be_deleted.next
+        return head
+
 
 if __name__ == "__main__":
-    fourth_node = Node(value=4, next=None)
-    third_node = Node(value=3, next=fourth_node)
+    third_node = Node(value=3, next=None)
     second_node = Node(value=2, next=third_node)
     head = Node(value=1, next=second_node)
 
@@ -64,7 +93,7 @@ if __name__ == "__main__":
     new_node = Node(value="inserted", next=None)
     # linked_list.insert_node(head, new_node, 1)
     # linked_list.insert_node(head, new_node, 2)
-    linked_list.insert_node(head, new_node, 5)
+    # linked_list.insert_node(head, new_node, 5)
 
     # try:
     #     linked_list.insert_node(head, new_node, 999)
@@ -72,4 +101,7 @@ if __name__ == "__main__":
     #     print("ValueError has occured.")
     #     pass
 
-    linked_list.print_list(head)
+    # new_head = linked_list.delete_node(head, 1)
+    new_head = linked_list.delete_node(head, 4)
+    if new_head is not None:
+        linked_list.print_list(new_head)
