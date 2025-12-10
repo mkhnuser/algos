@@ -1,107 +1,71 @@
-from typing import Any
-
-
 class Node:
-    def __init__(self, value: Any, next: "Node | None") -> None:
+    def __init__(self, value=None, next=None):
         self.value = value
         self.next = next
 
 
-# WARNING: One-based counting is assumed, not zero-based.
+def print_list(node):
+    while node is not None:
+        print(node.value)
+        node = node.next
 
 
-class LinkedList:
-    @staticmethod
-    def print_list(vertex: Node):
-        # NOTE: Perhaps, you want to provide head here.
-        current_node = vertex
+def insert_node(head, node, index):
+    # NOTE: Return a new node.
+    if index == 0:
+        node.next = head
+        return node
 
-        while current_node is not None:
-            print(current_node.value)
-            current_node = current_node.next
+    assert index >= 1
+    initial_head = head
+    index -= 1
 
-    @staticmethod
-    def insert_node(head: Node, vertex: Node, index: int) -> None:
-        # NOTE: Possible options are:
-        # 1. Insertion as a first element.
-        # 2. Insertion somewhere in the middle.
-        # 3. Insertion at the end.
-        # 2. and 3. are handled the same.
+    while head is not None and index > 0:
+        head = head.next
+        index -= 1
 
-        if index < 1:
-            raise ValueError(f"Out of bound index {index} has been provided.")
+    if head is None:
+        raise Exception("Out of range!")
 
-        if index == 1:
-            vertex.next = head
-            return
+    prev_next = head.next
+    head.next = node
+    node.next = prev_next
+    return initial_head
 
-        # NOTE: Assume natural counting is used:
-        # You count nodes from 1 onward.
-        # If you want insert something, you do it "before" the node position.
 
-        counter = 2
-        current_node = head
+def delete_node(head, index):
+    if index == 0:
+        return head.next
 
-        while current_node is not None:
-            if counter == index:
-                # NOTE: current -> v -> next.
-                vertex.next = current_node.next
-                current_node.next = vertex
-                return
+    assert index >= 1
+    index -= 1
+    initial_head = head
 
-            current_node = current_node.next
-            counter += 1
+    while head is not None and index > 0:
+        head = head.next
+        index -= 1
 
-        raise ValueError(f"Out of bound index {index} has been provided.")
+    if head is None:
+        raise Exception("Out of range!")
 
-    @staticmethod
-    def delete_node(head: Node, index: int) -> Node | None:
-        if index < 1:
-            raise ValueError("Invalid Index has been provided!")
+    to_be_deleted = head.next
 
-        if index == 1:
-            new_head = head.next
-            return new_head
+    if to_be_deleted is None:
+        raise Exception("Out of range!")
 
-        node = head
-        index -= 2
-
-        while index and node is not None:
-            node = node.next
-            index -= 1
-
-        if node is None:
-            raise ValueError("Invalid Index has been provided!")
-
-        node_to_be_deleted = node.next
-
-        if node_to_be_deleted is None:
-            raise ValueError("Invalid Index has been provided!")
-
-        node.next = node_to_be_deleted.next
-        return head
+    head.next = to_be_deleted.next
+    return initial_head
 
 
 if __name__ == "__main__":
-    third_node = Node(value=3, next=None)
-    second_node = Node(value=2, next=third_node)
-    head = Node(value=1, next=second_node)
+    first = Node(value=1)
+    second = Node(value=2)
+    third = Node(value=3)
+    fourth = Node(value=4)
 
-    linked_list = LinkedList()
-    # linked_list.print_list(head)
+    first.next = second
+    second.next = third
+    third.next = fourth
 
-    new_node = Node(value="inserted", next=None)
-    # linked_list.insert_node(head, new_node, 1)
-    # linked_list.insert_node(head, new_node, 2)
-    # linked_list.insert_node(head, new_node, 5)
-
-    # try:
-    #     linked_list.insert_node(head, new_node, 999)
-    # except ValueError:
-    #     print("ValueError has occured.")
-    #     pass
-
-    # new_head = linked_list.delete_node(head, 1)
-    new_head = linked_list.delete_node(head, 4)
-    if new_head is not None:
-        linked_list.print_list(new_head)
+    new_head = delete_node(first, 0)
+    print_list(new_head)
