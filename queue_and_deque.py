@@ -35,6 +35,60 @@ class Q:
         return item
 
 
+class CustomDeque:
+    def __init__(self, max_size):
+        self.max_size = max_size
+        self.actual_size = 0
+        self.items = [None] * max_size
+
+        self.head_pointer = 0
+        self.tail_pointer = max_size - 1
+
+    def push_back(self, value):
+        if self.actual_size >= self.max_size:
+            raise Exception("Max size has been exceeded!")
+
+        self.items[self.tail_pointer] = value
+        self.tail_pointer -= 1
+        self.tail_pointer %= self.max_size
+
+        self.actual_size += 1
+
+    def push_front(self, value):
+        if self.actual_size >= self.max_size:
+            raise Exception("Max size has been exceeded!")
+
+        self.items[self.head_pointer] = value
+        self.head_pointer += 1
+        self.head_pointer %= self.max_size
+
+        self.actual_size += 1
+
+    def pop_front(self):
+        if self.actual_size <= 0:
+            raise Exception("Deque is empty!")
+
+        index = (self.head_pointer - 1) % self.max_size
+        self.head_pointer = index
+        value = self.items[index]
+        self.items[index] = None
+        self.actual_size -= 1
+
+        return value
+
+    def pop_back(self):
+        if self.actual_size <= 0:
+            raise Exception("Deque is empty!")
+
+        index = (self.tail_pointer + 1) % self.max_size
+        self.tail_pointer = index
+        value = self.items[index]
+        self.items[index] = None
+        self.actual_size -= 1
+
+        return value
+
+
 def test_queue():
     q = Q(3)
 
