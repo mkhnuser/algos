@@ -31,7 +31,7 @@ class Q:
         self.size -= 1
 
         self.get_pointer -= 1
-        self.get_pointer %= 3
+        self.get_pointer %= self.max_size
         return item
 
 

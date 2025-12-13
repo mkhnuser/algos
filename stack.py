@@ -19,6 +19,7 @@ class Stack[T]:
         return len(self._stack)
 
 
+# NOTE: You can expand it to a Min Max stack.
 class StackMaxItem:
     def __init__(self):
         self.items = []
