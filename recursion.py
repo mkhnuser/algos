@@ -64,6 +64,17 @@ def build_stairs(n):
     build_stairs(n - 1)
 
 
+def generate_zeros_and_ones(n, prefix):
+    if n == 0:
+        return prefix + ""
+    if n == 1:
+        return prefix + "0", prefix + "1"
+    return [
+        *(string + "0" for string in generate_zeros_and_ones(n - 1, prefix)),
+        *(string + "1" for string in generate_zeros_and_ones(n - 1, prefix)),
+    ]
+
+
 if __name__ == "__main__":
     # print(find_file(str(pathlib.Path.home()), ".alacritty.toml"))
     # play_with_dolls(3)
@@ -85,4 +96,4 @@ if __name__ == "__main__":
     # )
 
     # build_stairs(3)
-    pass
+    print(generate_zeros_and_ones(3, ""))
