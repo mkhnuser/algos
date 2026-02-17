@@ -120,6 +120,20 @@ def dfs(node, needle) -> bool:
     return False
 
 
+def get_tree_height(node) -> int:
+    # NOTE: Base case for a dead end.
+    if node is None:
+        return 0
+
+    # NOTE: Base case for a leaf.
+    if not node.left and not node.right:
+        return 1
+
+    left_subtree_height = get_tree_height(node.left) if node.left else 0
+    right_subtree_height = get_tree_height(node.right) if node.right else 0
+    return max(left_subtree_height, right_subtree_height) + 1
+
+
 def test_bfs_for_nary_tree():
     #                    A
     #       B            C             D
@@ -154,6 +168,15 @@ def test_dfs_for_nary_tree():
     node_b = Node("B", children=[node_e, node_f])
     node_a = Node("A", children=[node_b, node_c, node_d])
     print(dfs(node_a, "G"))
+
+
+def test_get_tree_height():
+    node1 = Node(1)
+    node2 = Node(-5)
+    node3 = Node(3, node1, node2)
+    node4 = Node(10)
+    node5 = Node(2, node3, node4)
+    pass
 
 
 if __name__ == "__main__":
