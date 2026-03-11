@@ -75,6 +75,42 @@ def generate_zeros_and_ones(n, prefix):
     ]
 
 
+example = {
+    "Documents": {
+        "Proposal.docx": None,
+        "Receipts": {
+            "January": {"receipt1.txt": None, "receipt2.txt": None},
+            "February": {"receipt3.txt": None},
+        },
+    },
+}
+
+
+def list_files(parent_directory, current_filepath=""):
+    output_list = []
+
+    for key, value in parent_directory.items():
+        if value is None:
+            output_list.append(current_filepath + "/" + key)
+        else:
+            output_list.extend(
+                list_files(
+                    value,
+                    current_filepath=current_filepath + "/" + key,
+                )
+            )
+
+    return output_list
+
+
+assert list_files(example) == [
+    "/Documents/Proposal.docx",
+    "/Documents/Receipts/January/receipt1.txt",
+    "/Documents/Receipts/January/receipt2.txt",
+    "/Documents/Receipts/February/receipt3.txt",
+]
+
+
 if __name__ == "__main__":
     # print(find_file(str(pathlib.Path.home()), ".alacritty.toml"))
     # play_with_dolls(3)
