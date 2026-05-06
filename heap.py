@@ -1,78 +1,95 @@
-# NOTE: Classical texts use one-based indexing.
-# However, I will use zero-based here.
+class MinHeap:
+    def __init__(self):
+        self.data = []  # NOTE: This array will be preserve min heap property.
+
+    def insert(self, datum: int) -> None:
+        """Insert an element into a min heap."""
+        # NOTE: Append to the end.
+        # Sift up.
+        self.data.append(datum)
+        self._sift_up(len(self.data) - 1)
+
+    def delete(self) -> int:
+        """Delete the min element from a min heap."""
+        # NOTE: Pop the root.
+        # Put the last element at the root.
+        # Sift it down.
+        # Return the popped root.
+        if not self.data:
+            raise Exception("The heap is empty.")
+
+        out = self.data[0]
+        new_root = self.data.pop()
+
+        if not self.data:
+            # NOTE: The out element was the only element present in the heap.
+            return out
+
+        self.data[0] = new_root
+        self._sift_down(0)
+        return out
+
+    def _sift_up(self, index: int) -> None:
+        if index == 0:
+            return
+
+        parent_index = self._get_parent_index(index)
+        parent_element = self.data[parent_index]
+        current_element = self.data[index]
+
+        if parent_element > current_element:
+            self.data[parent_index], self.data[index] = (
+                self.data[index],
+                self.data[parent_index],
+            )
+            self._sift_up(parent_index)
+
+    def _sift_down(self, index: int) -> None:
+        if index >= len(self.data):
+            return
+
+        left_child_index = self._get_left_child_index(index)
+        right_child_index = self._get_right_child_index(index)
+        min_element_index = index
+
+        if (
+            left_child_index < len(self.data)
+            and self.data[left_child_index] < self.data[min_element_index]
+        ):
+            min_element_index = left_child_index
+        if (
+            right_child_index < len(self.data)
+            and self.data[right_child_index] < self.data[min_element_index]
+        ):
+            min_element_index = right_child_index
+
+        if min_element_index != index:
+            self.data[min_element_index], self.data[index] = (
+                self.data[index],
+                self.data[min_element_index],
+            )
+            self._sift_down(min_element_index)
+
+    def _get_parent_index(self, index: int) -> int:
+        return (index - 1) // 2
+
+    def _get_left_child_index(self, index: int) -> int:
+        return (2 * index) + 1
+
+    def _get_right_child_index(self, index: int) -> int:
+        return (2 * index) + 2
 
 
-import math
-import random
+def test_min_heap():
+    min_heap = MinHeap()
 
+    for element in (33, 21, 56, 5, 19, 18, 20):
+        min_heap.insert(element)
 
-def get_parent_index(i):
-    return math.floor((i - 1) / 2)
-
-
-def get_left_child_index(i):
-    return (2 * i) + 1
-
-
-def get_right_child_index(i):
-    return (2 * i) + 2
-
-
-def max_heapify(A, i):
-    lefty = get_left_child_index(i)
-    righty = get_right_child_index(i)
-
-    if lefty <= len(A) - 1 and A[lefty] > A[i]:
-        largest_index = lefty
-    else:
-        largest_index = i
-
-    if righty <= len(A) - 1 and A[righty] > A[largest_index]:
-        largest_index = righty
-
-    if largest_index != i:
-        A[i], A[largest_index] = A[largest_index], A[i]
-        max_heapify(A, largest_index)
-
-
-def build_max_heap(A, n):
-    for i in range(math.floor(n / 2), -1, -1):
-        max_heapify(A, i)
-
-
-def is_max_heap_prop_preserved(A, i):
-    lefty = get_left_child_index(i)
-    righty = get_right_child_index(i)
-
-    if lefty <= len(A) - 1:
-        if A[lefty] > A[i]:
-            is_lefty_ok = False
-        else:
-            is_lefty_ok = True
-    else:
-        is_lefty_ok = True
-
-    if righty <= len(A) - 1:
-        if A[righty] > A[i]:
-            is_righty_ok = False
-        else:
-            is_righty_ok = True
-    else:
-        is_righty_ok = True
-
-    return is_lefty_ok and is_righty_ok
-
-
-def is_max_heap(A):
-    for i in range(len(A)):
-        if not is_max_heap_prop_preserved(A, i):
-            return False
-    return True
-
-
-if __name__ == "__main__":
-    heap_array_sample = [70, 50, 20, 17, 45, 10, 6, 5, 4, 14]
-    array = heap_array_sample.copy()
-    random.shuffle(array)
-    build_max_heap(array, len(array) - 1)
-    assert is_max_heap(array)
+    assert min_heap.delete() == 5
+    assert min_heap.delete() == 18
+    assert min_heap.delete() == 19
+    assert min_heap.delete() == 20
+    assert min_heap.delete() == 21
+    assert min_heap.delete() == 33
+    assert min_heap.delete() == 56

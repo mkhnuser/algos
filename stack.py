@@ -1,25 +1,3 @@
-# NOTE: This thing works ONLY with type T, not with Any type.
-# To put it informally, it's "bound to" type T.
-class Stack[T]:
-    def __init__(self) -> None:
-        self._stack: list[T] = []
-
-    def push(self, item: T) -> None:
-        self._stack.append(item)
-
-    def pop(self) -> T | None:
-        if self._stack:
-            return self._stack.pop()
-
-    def peek(self) -> T | None:
-        if self._stack:
-            return self._stack[-1]
-
-    def size(self) -> int:
-        return len(self._stack)
-
-
-# NOTE: You can expand it to a Min Max stack.
 class StackMaxItem:
     def __init__(self):
         self.items = []
@@ -51,15 +29,3 @@ class StackMaxItem:
         if not self.items:
             return "error"
         return self.items[-1]
-
-
-if __name__ == "__main__":
-    stack = Stack[str]()
-    stack.push("banana")
-    stack.push("pear")
-    stack.push("peach")
-    assert stack.pop() == "peach"
-    assert stack.peek() == "pear"
-    assert stack.peek() == "pear"
-    assert stack.pop() == "pear"
-    assert stack.peek() == "banana"

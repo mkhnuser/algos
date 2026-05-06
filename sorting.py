@@ -76,7 +76,3 @@ def insertion_sort(array):
 
 if __name__ == "__main__":
     array = [-1, 1, -1, 1, -1, 10, 0, 42, 39, 87, 7, 0, 0]
-    # print(merge_sort(array))
-    # print(quick_sort(array))
-    nums = [5, 7, 1, 0, 1, 5, 11, 1]
-    print(counting_sort(nums))

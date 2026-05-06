@@ -23,67 +23,11 @@ def play_with_dolls(n):
     print(f"DOLL'S NUMBER {n} HEAD HAS BEEN ATTACHED BACK!")
 
 
-def find_with_recursive_bin_search(
-    left_pointer: int,
-    right_pointer: int,
-    middle_pointer: int,
-    array: list[int],
-    target: int,
-) -> int | None:
-    if left_pointer > right_pointer:
-        return
-
-    if array[middle_pointer] == target:
-        return middle_pointer
-    elif array[middle_pointer] > target:
-        right_pointer = middle_pointer - 1
-        # NOTE: It's important to include return so that the recursion propagates back successfully.
-        return find_with_recursive_bin_search(
-            left_pointer,
-            right_pointer,
-            ((left_pointer + right_pointer) // 2),
-            array,
-            target,
-        )
-    else:
-        # NOTE: < target
-        left_pointer = middle_pointer + 1
-        return find_with_recursive_bin_search(
-            left_pointer,
-            right_pointer,
-            ((left_pointer + right_pointer) // 2),
-            array,
-            target,
-        )
-
-
 def build_stairs(n):
     if n == 0:
         return
     print(n)
     build_stairs(n - 1)
-
-
-def generate_zeros_and_ones(n, prefix):
-    if n == 0:
-        return prefix + ""
-    if n == 1:
-        return prefix + "0", prefix + "1"
-    return [
-        *(string + "0" for string in generate_zeros_and_ones(n - 1, prefix)),
-        *(string + "1" for string in generate_zeros_and_ones(n - 1, prefix)),
-    ]
-
-
-example = {
-    "Documents": {
-        "Proposal.docx": None,
-        "Receipts": {
-            "January": {"receipt1.txt": None, "receipt2.txt": None},
-            "February": {"receipt3.txt": None},
-        },
-    },
-}
 
 
 def list_files(parent_directory, current_filepath=""):
@@ -103,33 +47,20 @@ def list_files(parent_directory, current_filepath=""):
     return output_list
 
 
-assert list_files(example) == [
-    "/Documents/Proposal.docx",
-    "/Documents/Receipts/January/receipt1.txt",
-    "/Documents/Receipts/January/receipt2.txt",
-    "/Documents/Receipts/February/receipt3.txt",
-]
-
-
 if __name__ == "__main__":
-    # print(find_file(str(pathlib.Path.home()), ".alacritty.toml"))
-    # play_with_dolls(3)
+    example = {
+        "Documents": {
+            "Proposal.docx": None,
+            "Receipts": {
+                "January": {"receipt1.txt": None, "receipt2.txt": None},
+                "February": {"receipt3.txt": None},
+            },
+        },
+    }
 
-    # array = [1, 2, 3, 44, 88, 99, 100, 101, 102]
-    # array.sort()
-    # left_pointer = 0
-    # right_pointer = len(array) - 1
-    # middle_pointer = (left_pointer + right_pointer) // 2
-    # target = -1
-    # print(
-    #     find_with_recursive_bin_search(
-    #         left_pointer,
-    #         right_pointer,
-    #         middle_pointer,
-    #         array,
-    #         target,
-    #     )
-    # )
-
-    # build_stairs(3)
-    print(generate_zeros_and_ones(3, ""))
+    assert list_files(example) == [
+        "/Documents/Proposal.docx",
+        "/Documents/Receipts/January/receipt1.txt",
+        "/Documents/Receipts/January/receipt2.txt",
+        "/Documents/Receipts/February/receipt3.txt",
+    ]
