@@ -1,15 +1,15 @@
-class MinHeap:
+class MinHeap[T]:
     def __init__(self):
         self.data = []  # NOTE: This array will be preserve min heap property.
 
-    def insert(self, datum: int) -> None:
+    def insert(self, datum: T) -> None:
         """Insert an element into a min heap."""
         # NOTE: Append to the end.
         # Sift up.
         self.data.append(datum)
         self._sift_up(len(self.data) - 1)
 
-    def delete(self) -> int:
+    def delete(self) -> T:
         """Delete the min element from a min heap."""
         # NOTE: Pop the root.
         # Put the last element at the root.
@@ -93,3 +93,7 @@ def test_min_heap():
     assert min_heap.delete() == 21
     assert min_heap.delete() == 33
     assert min_heap.delete() == 56
+
+
+if __name__ == "__main__":
+    test_min_heap()
