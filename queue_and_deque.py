@@ -1,6 +1,46 @@
 from typing import Any
 
 
+class Node:
+    def __init__(self, val, next=None) -> None:
+        self.val = val
+        self.next = next
+
+
+class Q:
+    """A rough attempt to implement a queue using a singly linked list."""
+
+    def __init__(self):
+        self.head = None
+        self.tail = None
+        self.size = 0
+
+    def put(self, item):
+        node = Node(item)
+        prev_tail = self.tail
+
+        if prev_tail is None:
+            self.head = node
+        else:
+            prev_tail.next = node
+
+        self.tail = node
+        self.size += 1
+
+    def get(self):
+        prev_head = self.head
+
+        if prev_head is None:
+            raise RuntimeError("Q is empty.")
+
+        if prev_head is self.tail:
+            self.tail = None
+
+        self.head = prev_head.next
+        self.size -= 1
+        return prev_head.val
+
+
 class Q:
     """A rough attempt to implement a queue using a circular buffer."""
 
